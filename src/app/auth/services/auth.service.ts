@@ -42,12 +42,18 @@ export class AuthService {
     );
   }
 
+  logout() {
+    this._currentUser.set(null);
+    this._authStatus.set(AuthStatus.notAuthenticated);
+    localStorage.removeItem('token');
+  }
+
   checkAuthStatus(): Observable<boolean> {
     const url = `${this.baseUrl}/auth/check-token`;
     const token = localStorage.getItem('token');
 
     if (!token) {
-      this._authStatus.set(AuthStatus.notAuthenticated);
+      this.logout();
       return of(false);
     }
 
